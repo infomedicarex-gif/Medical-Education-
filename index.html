@@ -1,0 +1,2375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreMium Nexus Testing Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1a56db;
+            --secondary-blue: #0ea5e9;
+            --dark-blue: #1e3a8a;
+            --light-blue: #dbeafe;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-teal: #14b8a6;
+            --gradient-blue: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            --gradient-green: linear-gradient(135deg, var(--accent-green), #34d399);
+            --gradient-orange: linear-gradient(135deg, var(--accent-orange), #f97316);
+            --gradient-red: linear-gradient(135deg, var(--accent-red), #f87171);
+            --gradient-purple: linear-gradient(135deg, var(--accent-purple), #a78bfa);
+            --gradient-pink: linear-gradient(135deg, var(--accent-pink), #f472b6);
+            --gradient-teal: linear-gradient(135deg, var(--accent-teal), #2dd4bf);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: #1e3a8a;
+            font-size: 11px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-blue);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2px;
+        }
+
+        .logo p {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .page {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            display: none;
+            position: relative;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reusable UI Elements */
+        .promo-banner {
+            background: linear-gradient(135deg, #1e3a8a, #1a56db);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.6rem;
+        }
+
+        .promo-banner h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #ffd700;
+        }
+
+        .promo-banner p {
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 0.7rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 6px 9px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            font-size: 0.7rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.15);
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .password-container .form-input {
+            padding-right: 30px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-blue);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(26, 86, 219, 0.2);
+        }
+
+        .btn-contact {
+            background: var(--gradient-green);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-purple {
+            background: var(--gradient-purple);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-red {
+            background: var(--gradient-red);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-red:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-orange {
+            background: var(--gradient-orange);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-orange:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-pink {
+            background: var(--gradient-pink);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-pink:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(236, 72, 153, 0.2);
+        }
+
+        .btn-teal {
+            background: var(--gradient-teal);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-teal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .error-box {
+            background: #fee2e2;
+            color: var(--accent-red);
+            padding: 5px 7px;
+            border-radius: 3px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        /* Main Page */
+        .main-page-buttons {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Quiz Access Section */
+        .quiz-access-section {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Payment Section */
+        .payment-info {
+            background: #f0f9ff;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            margin-bottom: 8px;
+        }
+
+        .payment-info h3 {
+            font-size: 0.8rem;
+            color: var(--dark-blue);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .payment-info p {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .payment-info span {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .acknowledgment-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        /* Quiz Section */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid var(--light-blue);
+        }
+
+        .quiz-title-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 80%;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.7rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .timer-container {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .timer, .question-timer {
+            background: var(--gradient-blue);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+        }
+
+        .timer.total-timer {
+            background: var(--gradient-orange);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            background: var(--gradient-blue);
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+        .question-nav-item {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.5rem;
+            cursor: pointer;
+            background: white;
+            border: 1.5px solid var(--light-blue);
+            transition: all 0.2s;
+        }
+
+        .question-nav-item.current {
+            background: var(--gradient-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .question-nav-item.solved {
+            background: var(--gradient-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .question-nav-item.visited {
+            background: var(--gradient-orange);
+            color: white;
+            border-color: var(--accent-orange);
+        }
+
+        .question-nav-item.out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        .question-container {
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark-blue);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .option {
+            padding: 5px 8px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            background: #f8fafc;
+            font-size: 0.7rem;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary-blue);
+            background: #e0f2fe;
+        }
+
+        .option.selected {
+            border-color: var(--primary-blue);
+            background: #dbeafe;
+        }
+
+        .option.correct {
+            border-color: var(--accent-green);
+            background: #d1fae5;
+        }
+
+        .option.incorrect {
+            border-color: var(--accent-red);
+            background: #fee2e2;
+        }
+
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .reasoning {
+            background: #f8fafc;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 8px;
+            display: none;
+            border-left: 3px solid var(--primary-blue);
+            font-size: 0.7rem;
+        }
+
+        .reasoning-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--dark-blue);
+            font-size: 0.75rem;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .nav-btn {
+            padding: 5px 7px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+        }
+
+        .btn-skip {
+            background: var(--gradient-orange);
+            color: white;
+        }
+
+        .btn-reasoning {
+            background: var(--gradient-purple);
+            color: white;
+        }
+
+        .btn-reasoning.disabled {
+            background: #dc3545;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-reasoning.disabled:hover {
+            background: #dc3545;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+        }
+
+        .btn-submit {
+            background: var(--gradient-green);
+            color: white;
+        }
+
+        /* Results Page */
+        .results-header-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .results-header-buttons .btn {
+            padding: 4px 6px;
+            font-size: 0.65rem;
+            width: 100%;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-blue);
+        }
+
+        .result-card h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--dark-blue);
+        }
+
+        .result-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-card th, .result-card td {
+            padding: 5px;
+            border: 1px solid #dbeafe;
+            text-align: left;
+        }
+
+        .result-card th {
+            background-color: var(--light-blue);
+            font-weight: 600;
+        }
+
+        .result-card td {
+            background-color: #f8fafc;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        /* All MCQs Page */
+        .all-mcqs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .all-mcq-item {
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .all-mcq-item .question-text {
+            color: var(--dark-blue);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .all-mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .all-mcq-option {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .all-mcq-option.correct {
+            background: #d1fae5;
+            color: var(--accent-green);
+            font-weight: 600;
+            border-color: #a7f3d0;
+        }
+
+        .all-mcq-reasoning {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #4b5563;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .all-mcq-reasoning strong {
+            color: var(--dark-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quiz-header {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            
+            .navigation-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .compact-contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .timer-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 5px;
+                justify-content: flex-end;
+                width: 100%;
+            }
+            
+            .quiz-title-container {
+                width: 100%;
+            }
+            
+            .dmc-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dmc-grades, .dmc-performance-bars {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .dmc-watermark {
+                font-size: 2rem;
+            }
+            
+            .promo-banner {
+                padding: 12px;
+            }
+            
+            .promo-banner h2 {
+                font-size: 0.8rem;
+            }
+            
+            .promo-banner p {
+                font-size: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>PreMium Nexus Testing Service</h1>
+            <p>Excellence in Educational Assessment</p>
+        </div>
+
+        <div id="signin-page" class="page active">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Access Test</h2>
+            <p>Sign in or use your access code</p>
+            
+            <div class="main-page-buttons">
+                <button class="btn btn-primary" onclick="showQuizAccessForm()">
+                    <i class="fas fa-lock"></i>
+                    <span>Sign In with Quiz Access Code</span>
+                </button>
+                <button class="btn btn-primary" onclick="showRegistrationPage()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Sign Up to Get Quiz Access</span>
+                </button>
+                <button class="btn btn-purple" onclick="showDeveloperAccessForm()">
+                    <i class="fas fa-code"></i>
+                    <span>Developer Access</span>
+                </button>
+            </div>
+            
+            <div id="developer-access-form" class="quiz-access-section">
+                <h3>Developer Login</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="developerPassword" class="form-input" placeholder="Enter the Developer Password">
+                    <i class="fas fa-eye-slash input-icon" id="toggleDeveloperPassword"></i>
+                </div>
+                <button class="btn btn-purple" onclick="checkDeveloperPassword()">
+                    <span>Log In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="dev-error-box" class="error-box">
+                    Invalid developer password.
+                </div>
+            </div>
+            
+            <div id="quiz-access-form" class="quiz-access-section">
+                <h3>Enter Quiz Access Code</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="quizAccessCode" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                    <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessCode"></i>
+                </div>
+                <button class="btn btn-primary" onclick="checkQuizAccessCode()">
+                    <span>Access Quiz</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="quiz-error-box" class="error-box">
+                    Invalid quiz access code.
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="registration-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Student Registration</h2>
+            <p>Please provide your details to register</p>
+            
+            <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input type="text" id="studentName" class="form-input" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Father Name</label>
+                <input type="text" id="fatherName" class="form-input" placeholder="Enter your father's name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email address">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mobile Number (WhatsApp)</label>
+                <input type="tel" id="mobile" class="form-input" placeholder="+92XXXXXXXXXX">
+            </div>
+            <button class="btn btn-primary" onclick="validateRegistrationForm()">
+                <span>Proceed to Payment</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div id="payment-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Payment Details</h2>
+            <p>Please complete the payment to receive your access code</p>
+            
+            <div class="payment-info">
+                <h3>Payment Information</h3>
+                <p>Please make payment through our official payment methods. After payment, you will receive an access code.</p>
+                <p>Contact us on WhatsApp at <a id="payment-whatsapp-link" href="https://wa.me/923247012882" style="color: var(--accent-green); text-decoration: none;">+923247012882</a> for payment details.</p>
+                <p style="margin-top: 8px; font-weight: bold;">Account Holder: <span id="payment-account-holder">Account Holder Name</span></p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Transaction ID</label>
+                <input type="text" id="transactionId" class="form-input" placeholder="Enter transaction ID">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Account Holder Name</label>
+                <input type="text" id="accountHolderName" class="form-input" placeholder="Enter your payment account name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount Sent</label>
+                <input type="number" id="amountSent" class="form-input" placeholder="Enter amount">
+            </div>
+            <div class="acknowledgment-checkbox">
+                <input type="checkbox" id="acknowledgment">
+                <label for="acknowledgment">I acknowledge that I have submitted the correct information and payment.</label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitPayment()">
+                <span>Submit Payment Info</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div id="quiz-access-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Quiz Access</h2>
+            <p>A Quiz Access Code will be sent to your registered mobile number after we receive and verify your payment.</p>
+
+            <div class="password-container input-container">
+                <input type="password" id="quizAccessFinal" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessFinal"></i>
+            </div>
+            
+            <button class="btn btn-primary" onclick="accessQuiz()">
+                <span>Access Quiz</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div id="final-quiz-error-box" class="error-box">
+                Invalid quiz access code.
+            </div>
+        </div>
+        
+        <div id="quiz-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+
+            <div class="quiz-header">
+                <div class="quiz-title-container">
+                    <h2 id="quiz-title"></h2>
+                    <div class="quiz-info">
+                        <span>Subject: <span id="quiz-subject">English Grammar</span></span>
+                        <span>Per MCQ: <span id="per-mcq-time">1</span> Minute</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timer-container">
+                <div class="timer" id="question-timer">60</div>
+                <div class="timer total-timer" id="timer">40:00</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="quiz-progress"></div>
+            </div>
+
+            <div class="question-nav" id="question-nav"></div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options-container" id="options-container"></div>
+                <div class="reasoning" id="reasoning">
+                    <div class="reasoning-title">Explanation:</div>
+                    <div id="reasoning-text"></div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="nav-btn btn-back" onclick="navigateQuestion('prev')">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="nav-btn btn-next" onclick="navigateQuestion('next')">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn btn-skip" onclick="navigateQuestion('skip')">
+                    <i class="fas fa-forward"></i> Skip
+                </button>
+                <button class="nav-btn btn-out-of-syllabus" onclick="markOutOfSyllabus()">
+                    <i class="fas fa-ban"></i> Out of Syllabus
+                </button>
+                <button class="nav-btn btn-reasoning disabled" id="reasoning-btn" onclick="toggleReasoning()">
+                    <i class="fas fa-lightbulb"></i> Reasoning
+                </button>
+                <button class="nav-btn btn-submit" onclick="submitTest()">
+                    Submit <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="results-page" class="page">
+            <div class="results-header-buttons">
+                <a id="website-link" href="#" target="_blank" class="btn btn-primary"><i class="fas fa-globe"></i> Website</a>
+                <a id="whatsapp-contact-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Contact</a>
+                <a id="whatsapp-community-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Community</a>
+            </div>
+            
+            <div class="result-card">
+                <h2>Student Information</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-info-table"></tbody>
+                </table>
+            </div>
+
+            <div class="result-card">
+                <h2>Test Results</h2>
+                <table>
+                    <tbody id="quiz-results-table"></tbody>
+                </table>
+            </div>
+            
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="restartTest()">
+                    <i class="fas fa-redo"></i> Retake Full Test
+                </button>
+                <button class="btn btn-primary" onclick="retakeIncorrect()">
+                    <i class="fas fa-bolt"></i> Retake Incorrect Questions
+                </button>
+                <button class="btn btn-primary" onclick="viewAllMcqs()">
+                    <i class="fas fa-clipboard-list"></i> View All MCQs
+                </button>
+            </div>
+        </div>
+
+        <div id="all-mcqs-page" class="page">
+            <h2>All MCQs and Solutions</h2>
+            <div class="all-mcqs-list" id="all-mcqs-list"></div>
+            <button class="btn btn-primary" onclick="showPage('results-page')">
+                <i class="fas fa-arrow-left"></i> Back to Results
+            </button>
+        </div>
+    </div>
+    
+    <script>
+// Quiz data - Biology 
+const quizData_Med_Rea_001 = [
+    {
+        question: "A novel neurotoxin specifically targets and neutralizes the Na+/K+ pump activity within neural membranes. What immediate and direct consequence would this have on a resting neuron's internal environment?",
+        options: [
+            "Increased negative organic ion concentration.",
+            "A shift towards a less negative resting potential.",
+            "Accelerated K+ efflux through leak channels.",
+            "Enhanced positive charge on the outer membrane."
+        ],
+        correctAnswer: 1,
+        reasoning: "The Na+/K+ pump actively transports 3 Na+ out and 2 K+ in, maintaining the negative resting membrane potential (-70mV inside). If its activity is neutralized, this active transport ceases, leading to an accumulation of Na+ inside and K+ equilibrating, making the inside less negative (depolarized) or a shift towards a less negative potential."
+    },
+    {
+        question: "An experimental drug significantly increases the permeability of a neuron's membrane to Na+ ions during its resting state. What would be the most predictable outcome for the neuron's ability to generate an action potential?",
+        options: [
+            "Increased threshold stimulus requirement.",
+            "Faster repolarization phase.",
+            "Reduced magnitude of depolarization.",
+            "Difficulty maintaining the resting potential."
+        ],
+        correctAnswer: 3,
+        reasoning: "The resting membrane potential is maintained by the Na+/K+ pump and lower Na+ permeability. If Na+ permeability increases during rest, more Na+ would leak in, making the inside less negative. This makes it harder to achieve the necessary 'all or nothing' depolarization from -70mV to +50mV, thus reducing the magnitude of the depolarization phase of an action potential, or even preventing proper resting potential maintenance."
+    },
+    {
+        question: "If a glial cell type responsible for producing a lipid layer around axons in the PNS were dysfunctional, what physiological consequence would most directly arise regarding nerve impulse transmission?",
+        options: [
+            "Increased energy consumption for impulse propagation.",
+            "Faster synaptic neurotransmitter release.",
+            "Reduced electrical resistance across the axon membrane.",
+            "Altered directional flow of nerve impulses."
+        ],
+        correctAnswer: 0,
+        reasoning: "Schwann cells (a type of glial cell in PNS) produce the myelin sheath, which insulates and enables saltatory conduction. If dysfunctional, myelination would be impaired, leading to continuous conduction. Continuous conduction occurs along the entire axon, requiring more widespread ionic exchange and thus more active transport by Na+/K+ pumps to restore potentials, implying increased energy consumption."
+    },
+    {
+        question: "Consider a neuron where voltage-regulated K+ gates remain open for an extended duration after repolarization. What immediate effect would this have on the membrane potential?",
+        options: [
+            "Premature return to threshold potential.",
+            "An exaggerated hyperpolarization state.",
+            "Failure of sodium gate inactivation.",
+            "Decreased Na+ influx during depolarization."
+        ],
+        correctAnswer: 1,
+        reasoning: "Repolarization involves the opening of voltage-regulated K+ gates, allowing K+ to rush out. If these gates remain open longer than normal, it would lead to excessive K+ efflux, causing the membrane potential to become even more negative than the resting potential (-70mV), resulting in an exaggerated hyperpolarization beyond -90mV."
+    },
+    {
+        question: "Damage to a patient's spinal cord causes the complete loss of sensation from the skin below the injury, but the patient can still move their limbs. Which specific region of the spinal cord's gray matter is most likely affected in this scenario?",
+        options: [
+            "The ventral horn.",
+            "The central canal.",
+            "The dorsal horn.",
+            "The white matter."
+        ],
+        correctAnswer: 2,
+        reasoning: "Sensory impulses from the skin enter the spinal cord via sensory nerves that connect in the dorsal horn of the gray matter. Loss of sensation indicates a problem with sensory input. Since motor function (moving limbs) is intact, the ventral horn (where motor neurons originate) is likely functional. White matter carries both sensory and motor tracts, but the specific localization of sensory nerve connections is in the dorsal horn."
+    },
+    {
+        question: "A substance that inhibits the ability of Na+ gates to open in response to a threshold stimulus would primarily prevent which phase of an action potential?",
+        options: [
+            "Restoration of ionic distribution.",
+            "Repolarization.",
+            "Hyperpolarization.",
+            "Depolarization."
+        ],
+        correctAnswer: 3,
+        reasoning: "Depolarization is initiated by a threshold stimulus opening voltage-regulated Na+ gates, allowing Na+ influx. If these gates cannot open, the rapid influx of Na+ required for depolarization from -70mV to +50mV cannot occur, thus preventing depolarization."
+    },
+    {
+        question: "Consider a neuron lacking Nodes of Ranvier. How would its nerve impulse conduction differ from a typical myelinated neuron?",
+        options: [
+            "Faster velocity due to continuous insulation.",
+            "Reduced energy expenditure for signal transmission.",
+            "Slower and continuous signal propagation.",
+            "Inability to transmit any electrical signal."
+        ],
+        correctAnswer: 2,
+        reasoning: "Nodes of Ranvier are gaps in the myelin sheath where the impulse 'jumps' (saltatory conduction), making it faster in myelinated fibers. A neuron lacking these nodes would effectively have continuous myelin or no myelin, leading to continuous impulse conduction, which is slower than saltatory conduction in myelinated fibers."
+    },
+    {
+        question: "A patient experiences a sudden inability to coordinate fine motor movements, such as picking up small objects, despite having normal muscle strength. Which brain region is most likely impaired?",
+        options: [
+            "The hypothalamus.",
+            "The cerebrum's frontal lobe.",
+            "The cerebellum.",
+            "The thalamus."
+        ],
+        correctAnswer: 2,
+        reasoning: "The cerebellum is responsible for controlling balance and coordination of movement, including delicate work. Normal muscle strength suggests the motor cortex (frontal lobe) and spinal cord are functional, but the coordination aspect points directly to the cerebellum."
+    },
+    {
+        question: "An individual sustains an injury that disrupts the flow of cerebrospinal fluid (CSF). Besides cushioning, which other critical function of the CNS protection mechanism would be compromised?",
+        options: [
+            "Direct nutrient absorption by neurons.",
+            "Regulation of the blood-brain barrier.",
+            "Homeostasis and metabolism within CNS.",
+            "Mechanical rigidity of the brain structure."
+        ],
+        correctAnswer: 2,
+        reasoning: "The CSF cushions the CNS from mechanical shocks but also plays a role in homeostasis and metabolism. Disruption of CSF flow would compromise these metabolic and homeostatic functions, as CSF is involved in the diffusion, pinocytosis, and active transport of substances."
+    },
+    {
+        question: "Selective destruction of the anterior gray matter of the spinal cord would primarily affect which neuronal function?",
+        options: [
+            "Sensory input processing from the skin.",
+            "Transmission of motor commands to effectors.",
+            "Integration between sensory and motor neurons.",
+            "Conduction of impulses from receptors to CNS."
+        ],
+        correctAnswer: 1,
+        reasoning: "The ventral horn (anterior gray matter) of the spinal cord is where motor nerves originate. Therefore, its destruction would directly impair the transmission of motor impulses from the brain to muscles and glands (effectors)."
+    },
+    {
+        question: "A person suffering from severe insomnia and chronic dehydration might have a dysfunction in which specific forebrain structure?",
+        options: [
+            "The amygdala.",
+            "The hippocampus.",
+            "The thalamus.",
+            "The hypothalamus."
+        ],
+        correctAnswer: 3,
+        reasoning: "The hypothalamus maintains homeostasis, including sleep (sleep-wake cycle) and water balance (thirst). Therefore, issues with insomnia and dehydration point to a dysfunction in the hypothalamus."
+    },
+    {
+        question: "A novel neurotoxin prevents the closure of voltage-gated Na+ channels. What immediate impact would this have on the repolarization phase of an action potential?",
+        options: [
+            "Accelerated K+ efflux.",
+            "Delayed or absent repolarization.",
+            "Enhanced hyperpolarization.",
+            "Reduced threshold for subsequent action potentials."
+        ],
+        correctAnswer: 1,
+        reasoning: "Repolarization requires the Na+ gates to close and K+ gates to open. If Na+ gates remain open, Na+ would continue to rush into the cell, preventing the membrane potential from returning to its negative resting state, thus delaying or preventing repolarization."
+    },
+    {
+        question: "Considering the 'all or nothing' principle, what outcome is expected if a subthreshold stimulus is applied to a neuron?",
+        options: [
+            "A partial action potential is generated.",
+            "Voltage-gated K+ channels open partially.",
+            "No action potential is generated.",
+            "Hyperpolarization immediately occurs."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'all or nothing' principle dictates that an action potential only occurs if a threshold stimulus is reached. A subthreshold stimulus is not strong enough to cause an electrochemical change; therefore, no action potential will be generated."
+    },
+    {
+        question: "A patient experiences difficulty processing sensory information and directing it to appropriate cortical areas, yet can still perceive basic sensations. Which forebrain component is most likely impaired?",
+        options: [
+            "The cerebral cortex.",
+            "The hypothalamus.",
+            "The thalamus.",
+            "The limbic system."
+        ],
+        correctAnswer: 2,
+        reasoning: "The thalamus receives all sensory impulses (except smell) and channels them to the limbic system and cortex for interpretation. Difficulty processing and directing sensory information, while still perceiving it (implying receptors and initial sensory neurons are fine), suggests a problem with the thalamus, which acts as a relay station."
+    },
+    {
+        question: "Selective damage to the corpus callosum would primarily disrupt communication between which two neural structures?",
+        options: [
+            "The cerebrum and cerebellum.",
+            "The two cerebral hemispheres.",
+            "The thalamus and hypothalamus.",
+            "The brainstem and spinal cord."
+        ],
+        correctAnswer: 1,
+        reasoning: "The cerebrum consists of two cerebral hemispheres connected by the corpus callosum. Damage to the corpus callosum would therefore disrupt communication between these two hemispheres."
+    },
+    {
+        question: "A person suffering from uncontrolled rage and inappropriate emotional responses, despite intact cognitive function, might have a lesion in which limbic system component?",
+        options: [
+            "The hippocampus.",
+            "The thalamus.",
+            "The amygdala.",
+            "The hypothalamus."
+        ],
+        correctAnswer: 2,
+        reasoning: "The amygdala is a component of the limbic system involved in controlling feelings and emotions like love, hate, anger, fear, rage, and sexual arousal. Uncontrolled rage and inappropriate emotional responses point to amygdala dysfunction."
+    },
+    {
+        question: "If the diffusion of K+ ions out of a neuron's membrane were completely blocked, what direct impact would this have on the establishment of the resting membrane potential?",
+        options: [
+            "The Na+/K+ pump would become more efficient.",
+            "The inside of the neuron would become more positive.",
+            "Negatively charged organic ions would efflux.",
+            "The threshold for action potential would decrease."
+        ],
+        correctAnswer: 1,
+        reasoning: "One of the factors maintaining the resting membrane potential (negative inside) is the continuous leakage of K+ ions out of the cell. If this efflux is blocked, K+ would accumulate inside, or at least not contribute to the outside positivity, making the inside less negative (more positive) than the normal resting state."
+    },
+    {
+        question: "An individual is unable to form new long-term memories after a specific brain injury, yet their short-term memory remains functional. Which limbic structure is most likely affected?",
+        options: [
+            "The amygdala.",
+            "The hypothalamus.",
+            "The hippocampus.",
+            "The pons."
+        ],
+        correctAnswer: 2,
+        reasoning: "The hippocampus is a limbic system structure known for converting short-term to long-term memory. An inability to form new long-term memories, while retaining short-term memory, points to damage in the hippocampus."
+    },
+    {
+        question: "What is the primary consequence if the Schwann cells in the PNS fail to mature and form their characteristic lipid layer?",
+        options: [
+            "Reduced protein synthesis in neuron cell bodies.",
+            "Slowed nerve impulse conduction velocity.",
+            "Increased production of cerebrospinal fluid.",
+            "Altered neurotransmitter release at synapses."
+        ],
+        correctAnswer: 1,
+        reasoning: "Schwann cells produce the myelin sheath, a lipid layer that acts as an insulator and increases nerve impulse speed through saltatory conduction. Failure to form this layer would result in slower, continuous conduction, thus reducing nerve impulse conduction velocity."
+    },
+    {
+        question: "An agent that specifically prevents the closing of voltage-regulated Na+ gates would primarily lead to which state in a neuron?",
+        options: [
+            "Prolonged hyperpolarization.",
+            "Sustained depolarization.",
+            "Faster repolarization.",
+            "Reduced refractory period."
+        ],
+        correctAnswer: 1,
+        reasoning: "During depolarization, Na+ gates open, and Na+ rushes in. For repolarization, these gates must close. If they cannot close, Na+ influx would continue or be sustained, keeping the cell in a depolarized state, meaning sustained depolarization."
+    },
+    {
+        question: "A patient exhibits severely impaired regulation of breathing rate and heart rate, while other brain functions appear relatively normal. Which specific hindbrain structure is most likely compromised?",
+        options: [
+            "The cerebellum.",
+            "The pons.",
+            "The medulla oblongata.",
+            "The midbrain."
+        ],
+        correctAnswer: 2,
+        reasoning: "The medulla oblongata controls automatic functions outside conscious control, including heartbeat, blood pressure, and respiration. Impaired regulation of breathing and heart rate strongly suggests a problem with the medulla oblongata."
+    },
+    {
+        question: "The presence of significant amounts of negatively charged proteins and amino acids within the neuronal cytoplasm contributes directly to what aspect of its electrical state?",
+        options: [
+            "The speed of saltatory conduction.",
+            "The maintenance of resting membrane potential.",
+            "The rapid influx of Na+ during depolarization.",
+            "The duration of the refractory period."
+        ],
+        correctAnswer: 1,
+        reasoning: "The presence of negative organic ions inside the neuron is one of the factors maintaining the resting membrane potential, making the inside relatively negative compared to the outside."
+    },
+    {
+        question: "A drug that selectively blocks the reuptake of dopamine in the midbrain's reticular formation would likely have what effect on an individual?",
+        options: [
+            "Impaired motor coordination.",
+            "Altered sleep-wake cycles.",
+            "Reduced pain perception.",
+            "Increased body temperature."
+        ],
+        correctAnswer: 1,
+        reasoning: "The reticular formation, which runs through the hindbrain and midbrain, is involved in sleep and wakefulness. Dopamine release is also mentioned in the context of the midbrain. While the prompt doesn't explicitly link dopamine reuptake to sleep-wake cycles in the text, it states the midbrain releases dopamine and the reticular formation is in the midbrain and involved in sleep-wakefulness. Blocking reuptake would increase dopamine availability, thereby altering sleep-wake cycles. (This one is tricky as it connects two slightly separate facts from the midbrain section)."
+    },
+    {
+        question: "Which type of neuron is exclusively located within the central nervous system, serving as a connector for information flow?",
+        options: [
+            "Afferent neurons.",
+            "Motor neurons.",
+            "Sensory neurons.",
+            "Interneurons."
+        ],
+        correctAnswer: 3,
+        reasoning: "Interneurons (also called association or relay neurons) are entirely within the CNS and convey messages between sensory and motor neurons. Sensory neurons carry impulses to the CNS, and motor neurons carry impulses from the CNS, implying parts of them are outside."
+    },
+    {
+        question: "A disorder causes the gradual thickening and toughening of the innermost protective layer of the brain and spinal cord. Which specific membrane is primarily affected?",
+        options: [
+            "The dura mater.",
+            "The arachnoid mater.",
+            "The pia mater.",
+            "The epineurium."
+        ],
+        correctAnswer: 2,
+        reasoning: "The pia mater is the innermost, thin, pigmented membrane next to the nervous tissue. The description 'thickening and toughening' is a distractor, as the pia mater is normally thin, but the location 'innermost protective layer' points unequivocally to the pia mater."
+    },
+    {
+        question: "Failure of the Na+/K+ pump to function would directly cause which of the following regarding the initial ionic distribution across a neuronal membrane?",
+        options: [
+            "An increase in intracellular K+.",
+            "A decrease in extracellular Na+.",
+            "A loss of the established concentration gradients.",
+            "An enhancement of the negative organic ion effect."
+        ],
+        correctAnswer: 2,
+        reasoning: "The Na+/K+ pump is responsible for actively pumping 3 Na+ out for every 2 K+ in, which is crucial for establishing and maintaining the specific concentration gradients of Na+ and K+ across the membrane at rest. Its failure would lead to the loss of these gradients."
+    },
+    {
+        question: "An experimental lesion severs the connections between the cerebrum and the cerebellum. Which function would be most directly impaired?",
+        options: [
+            "Conscious thought processes.",
+            "Coordination of voluntary movements.",
+            "Regulation of body temperature.",
+            "Relay of sensory information."
+        ],
+        correctAnswer: 1,
+        reasoning: "The cerebellum controls the coordination of movement (walking, running, delicate work). While the cerebrum initiates conscious movement, the cerebellum fine-tunes and coordinates it. Severing connections would impair this coordination aspect."
+    },
+    {
+        question: "If the tight junctions between blood vessels in the brain and spinal cord become compromised, allowing increased permeability, which fluid component protecting the CNS would be most directly affected in its composition?",
+        options: [
+            "Plasma.",
+            "Lymph.",
+            "Cerebrospinal fluid.",
+            "Intracellular fluid."
+        ],
+        correctAnswer: 2,
+        reasoning: "Cerebrospinal fluid (CSF) is produced from blood vessels in the brain and spinal cord through diffusion, pinocytosis, and active transport. Increased permeability of these vessels would directly alter the composition of the CSF as it's derived from blood."
+    },
+    {
+        question: "A patient loses the ability to perceive pain from a specific region of their body, despite intact touch and temperature sensation. Which type of receptor is most likely non-functional in that area?",
+        options: [
+            "Photoreceptors.",
+            "Mechanoreceptors.",
+            "Nociceptors.",
+            "Thermoreceptors."
+        ],
+        correctAnswer: 2,
+        reasoning: "Nociceptors are specialized receptors that respond to tissue damage, leading to pain perception. If pain perception is lost, while other sensations remain, nociceptors are the most likely non-functional receptors."
+    },
+    {
+        question: "Which classification of neuron, based on its structure, is characteristic of most neurons found in the brain and spinal cord, possessing multiple input points?",
+        options: [
+            "Unipolar.",
+            "Bipolar.",
+            "Pseudounipolar.",
+            "Multipolar."
+        ],
+        correctAnswer: 3,
+        reasoning: "Multipolar neurons have three or more processes (several dendrites, one axon) and are described as 'most common,' implying they are prevalent in the CNS, which includes the brain and spinal cord, and their numerous dendrites provide multiple input points."
+    },
+    {
+        question: "If the flow of K+ ions through non-voltage regulated gates were completely inhibited in a resting neuron, what specific effect would it have on the resting membrane potential?",
+        options: [
+            "The inside would become more negative.",
+            "The outside would become more negative.",
+            "The potential difference would be abolished.",
+            "Depolarization would occur spontaneously."
+        ],
+        correctAnswer: 1,
+        reasoning: "The continuous leakage of K+ ions out through non-voltage regulated gates contributes to the positive charge outside the cell and the negative resting potential inside. Inhibiting this leakage would reduce the positive charge outside, making the outside less positive, or effectively more negative relative to the inside."
+    },
+    {
+        question: "An individual experiences a rapid, involuntary withdrawal of their hand from a hot surface, occurring before they consciously register the pain. Which neuronal pathway component ensures this rapid response without direct brain processing?",
+        options: [
+            "Effector bypassing the CNS.",
+            "Sensory neuron directly activating motor neuron.",
+            "Interneuron facilitating rapid relay in CNS.",
+            "Reduced synaptic delay in the cerebrum."
+        ],
+        correctAnswer: 2,
+        reasoning: "A reflex arc is the pathway for rapid, involuntary responses, where the brain is not directly involved, making them fast. This pathway includes a receptor, sensory neuron, interneuron (in CNS), motor neuron, and effector. The interneuron in the CNS facilitates the rapid relay without conscious brain processing."
+    },
+    {
+        question: "A patient presents with symptoms including an inability to regulate body temperature effectively and chronic hunger, alongside an abnormal sleep-wake cycle. Which specific diencephalon structure is likely dysfunctional?",
+        options: [
+            "Thalamus.",
+            "Hippocampus.",
+            "Hypothalamus.",
+            "Amygdala."
+        ],
+        correctAnswer: 2,
+        reasoning: "The hypothalamus, located ventral to the thalamus within the diencephalon, maintains homeostasis, including hunger, sleep-wake cycle, and body temperature. All these symptoms point to hypothalamus dysfunction."
+    },
+    {
+        question: "What is the primary function of Nissl's bodies within a neuron's cell body?",
+        options: [
+            "Signal reception.",
+            "Lipid insulation.",
+            "Protein synthesis.",
+            "Impulse conduction."
+        ],
+        correctAnswer: 2,
+        reasoning: "Nissl's bodies are described as ribosomes and rough ER, which are organelles responsible for protein synthesis. Therefore, their primary function is protein synthesis."
+    },
+    {
+        question: "If an experimental intervention caused voltage-regulated Na+ gates to open at a less negative potential than normal (e.g., -80mV instead of -70mV threshold), what would be the likely outcome for nerve excitability?",
+        options: [
+            "Decreased excitability, requiring stronger stimuli.",
+            "Increased excitability, requiring weaker stimuli.",
+            "No change in excitability, only action potential duration.",
+            "Spontaneous, uncontrolled firing of action potentials."
+        ],
+        correctAnswer: 0,
+        reasoning: "The text states the threshold stimulus is required to cause the electrochemical change. If Na+ gates open at a *less negative* potential (e.g., -80mV, implying a *larger* voltage change is needed from RMP of -70mV to reach this new threshold), it means a stronger stimulus would be required to reach this altered threshold, thus decreasing excitability."
+    },
+    {
+        question: "A novel disease causes degradation of the neurofibrils within axons. Which neuronal function would be most directly impaired?",
+        options: [
+            "Reception of stimuli by dendrites.",
+            "Synthesis of neurotransmitters.",
+            "Conduction of action potentials.",
+            "Maintenance of the resting membrane potential."
+        ],
+        correctAnswer: 2,
+        reasoning: "Neurofibrils are structural components within the axon (and cell body). While the text doesn't explicitly state their function, they are components of the axon, which conducts action potentials. Degradation would impair the structural integrity crucial for the conduction of action potentials."
+    },
+    {
+        question: "Consider a condition where the normal positive charge outside the resting neuronal membrane cannot be established. Which contributing factor is most directly compromised?",
+        options: [
+            "Na+/K+ pump activity.",
+            "Negative organic ions inside.",
+            "Myelin sheath integrity.",
+            "Synaptic delay mechanisms."
+        ],
+        correctAnswer: 0,
+        reasoning: "The Na+/K+ pump pumps 3 Na+ ions out for every 2 K+ ions in, actively contributing to the more positive charge outside the membrane at rest. If this positive charge cannot be established, the pump's activity is directly compromised."
+    },
+    {
+        question: "An individual experiences a deficit in converting short-term sensory inputs into enduring memories, while emotional processing remains intact. Which forebrain structure is specifically implicated?",
+        options: [
+            "Amygdala.",
+            "Hypothalamus.",
+            "Hippocampus.",
+            "Thalamus."
+        ],
+        correctAnswer: 2,
+        reasoning: "The hippocampus is responsible for converting short-term to long-term memory. A deficit in forming enduring memories directly points to a hippocampal dysfunction. The amygdala handles emotions, which are noted as intact."
+    },
+    {
+        question: "During the absolute refractory period, a neuron is unable to respond to a new stimulus. What specific membrane event primarily prevents a second action potential?",
+        options: [
+            "Overactivity of the Na+/K+ pump.",
+            "Sustained opening of voltage-regulated K+ gates.",
+            "Inactivation of voltage-regulated Na+ gates.",
+            "Excessive K+ influx into the cell."
+        ],
+        correctAnswer: 2,
+        reasoning: "The absolute refractory period occurs when the Na+ gates are either open or inactivated. During this time, they cannot open again to initiate a new depolarization, thus preventing a new action potential regardless of stimulus strength. While K+ gates are open during repolarization, it's the Na+ gate inactivation that defines the absolute refractory period."
+    },
+    {
+        question: "Damage to the reticular formation would most broadly affect which fundamental CNS function?",
+        options: [
+            "Higher cognitive processing.",
+            "Emotional memory formation.",
+            "Consciousness and arousal.",
+            "Precise motor coordination."
+        ],
+        correctAnswer: 2,
+        reasoning: "The reticular formation is involved in sleep and wakefulness, which are fundamental aspects of consciousness and arousal. Damage would broadly affect these states."
+    },
+    {
+        question: "A patient presents with difficulty understanding spoken language, despite having normal hearing and no motor speech impairment. Which lobe of the cerebrum is most likely affected?",
+        options: [
+            "Frontal lobe.",
+            "Parietal lobe.",
+            "Temporal lobe.",
+            "Occipital lobe."
+        ],
+        correctAnswer: 2,
+        reasoning: "The cerebral cortex has specific lobes with sensory, association, and motor areas. The temporal lobe contains areas for auditory processing and interpretation of sound. Difficulty understanding spoken language, despite normal hearing, points to an issue with processing and interpreting auditory information, which is a function of the temporal lobe."
+    },
+    {
+        question: "What is the primary role of the axolemma in nerve impulse transmission?",
+        options: [
+            "Synthesis of cellular proteins.",
+            "Insulation of the axon.",
+            "Reception of synaptic signals.",
+            "Regulation of ion movement across the axon."
+        ],
+        correctAnswer: 3,
+        reasoning: "The axolemma is the cell membrane of the axon. Cell membranes are crucial for regulating the movement of ions (Na+, K+) across them, which is fundamental to the generation and transmission of nerve impulses (action potentials)."
+    },
+    {
+        question: "Considering the structure of a sensory neuron, where would its cell body typically be located in relation to the CNS?",
+        options: [
+            "Entirely within the cerebral cortex.",
+            "Just outside the CNS.",
+            "Integrated within the ventral horn.",
+            "Near the effector organ."
+        ],
+        correctAnswer: 1,
+        reasoning: "Sensory neurons (afferent) carry impulses from receptors to the CNS, and their cell body is often just outside the CNS (e.g., in the dorsal root ganglion). This distinguishes them from interneurons (entirely within CNS) and motor neurons (originating in CNS)."
+    },
+    {
+        question: "A neuron capable of conducting approximately 250 impulses per second implies what characteristic of its refractory period?",
+        options: [
+            "It has an extended absolute refractory phase.",
+            "Its total refractory period is about 4 milliseconds.",
+            "It requires a very strong stimulus to overcome relative refractoriness.",
+            "Voltage-gated K+ channels remain open for an unusually long time."
+        ],
+        correctAnswer: 1,
+        reasoning: "The text states that a neuron can conduct ~250 impulses/second, and the refractory period lasts ~4 milliseconds. 1000 milliseconds / 4 milliseconds = 250. So, conducting 250 impulses per second implies its total refractory period is approximately 4 milliseconds."
+    },
+    {
+        question: "What distinguishes the gray matter from the white matter in a cross-section of the spinal cord?",
+        options: [
+            "Gray matter contains only axons, white matter contains only cell bodies.",
+            "Gray matter surrounds the central canal, white matter is peripheral.",
+            "Gray matter is primarily myelinated, white matter is unmyelinated.",
+            "Gray matter conducts impulses to the brain, white matter carries motor commands."
+        ],
+        correctAnswer: 1,
+        reasoning: "The text describes the spinal cord's cross-section: 'Inner Gray Matter: H-shaped/butterfly shape. Consists of neuron cell bodies and non-myelinated parts of fibers. Surrounds central canal. Outer White Matter: Consists of bundles of myelinated fibers.' This directly supports option 1."
+    },
+    {
+        question: "A person develops a condition where their voluntary skeletal muscles are activated without conscious control. Which division of the PNS is inappropriately influencing these muscles?",
+        options: [
+            "Sympathetic division.",
+            "Parasympathetic division.",
+            "Somatic nervous system.",
+            "Autonomic nervous system."
+        ],
+        correctAnswer: 2,
+        reasoning: "The Somatic Nervous System controls voluntary movements by activating skeletal muscles. If these muscles are activated without conscious control, it implies an inappropriate influence *within* or affecting the somatic nervous system, which is typically voluntary. The Autonomic NS controls *involuntary* responses in organs, glands, and smooth muscles, not skeletal muscles."
+    },
+    {
+        question: "How does the Na+/K+ pump specifically contribute to the negative charge inside a resting neuron?",
+        options: [
+            "It pumps equal numbers of Na+ and K+ ions.",
+            "It actively moves more positive ions out than in.",
+            "It allows K+ ions to leak out passively.",
+            "It transports negative organic ions out of the cell."
+        ],
+        correctAnswer: 1,
+        reasoning: "The Na+/K+ pump actively transports 3 Na+ ions out for every 2 K+ ions pumped in. This creates an imbalance of charge, moving more positive ions (3 out) than it brings in (2 in), thus contributing to the net negative charge inside."
+    },
+    {
+        question: "An individual experiences a rapid heart rate, dilated pupils, and increased sweating in a non-stressful environment. Which branch of the autonomic nervous system appears to be hyperactive?",
+        options: [
+            "Somatic nervous system.",
+            "Central nervous system.",
+            "Parasympathetic division.",
+            "Sympathetic division."
+        ],
+        correctAnswer: 3,
+        reasoning: "The sympathetic division of the autonomic nervous system is responsible for the 'fight or flight' response, which prepares the body for stressful or energetic activity. Symptoms like rapid heart rate, dilated pupils, and increased sweating are characteristic responses to sympathetic activation."
+    },
+    {
+        question: "What is the primary factor accounting for the increased velocity of nerve impulse transmission in myelinated fibers compared to unmyelinated ones?",
+        options: [
+            "Larger axon diameter.",
+            "Greater Na+/K+ pump density.",
+            "Saltatory conduction.",
+            "Increased concentration of Nissl's bodies."
+        ],
+        correctAnswer: 2,
+        reasoning: "Myelinated fibers conduct impulses much faster (up to 50 times) due to saltatory impulse conduction, where the impulse 'jumps' from one Node of Ranvier to the next."
+    },
+    {
+        question: "If a neuron's voltage-regulated K+ gates were unable to open, what immediate consequence would this have on the membrane potential following depolarization?",
+        options: [
+            "Rapid hyperpolarization.",
+            "Failed repolarization.",
+            "Accelerated Na+ influx.",
+            "Reduced threshold potential."
+        ],
+        correctAnswer: 1,
+        reasoning: "Repolarization occurs when voltage-regulated K+ gates open, allowing K+ ions to rush out, restoring the negative inside/positive outside polarity. If these gates cannot open, K+ efflux would be prevented, leading to a failure of repolarization."
+    },
+    {
+        question: "Which of the following is an example of an effector in a reflex arc pathway?",
+        options: [
+            "A taste bud detecting sweetness.",
+            "A photoreceptor in the retina.",
+            "A gland secreting hormones.",
+            "An interneuron in the spinal cord."
+        ],
+        correctAnswer: 2,
+        reasoning: "Effectors are defined as muscles (producing movement) or glands (producing secretions) that carry out the response. A gland secreting hormones fits this description. Taste buds and photoreceptors are receptors, and interneurons are part of the CNS pathway."
+    },
+    {
+        question: "A pharmaceutical agent specifically inhibits the development of rough endoplasmic reticulum and ribosomes within neurons. What structural component of neurons would be most directly affected?",
+        options: [
+            "Neurofibrils.",
+            "Myelin sheath.",
+            "Nissl's bodies.",
+            "Axoplasm."
+        ],
+        correctAnswer: 2,
+        reasoning: "Nissl's bodies are defined as ribosomes and rough ER. Therefore, inhibiting their development would directly affect Nissl's bodies."
+    },
+    {
+        question: "Why is the brain not directly involved in the simple reflex arc, leading to a rapid response?",
+        options: [
+            "Brain processing would consume too much ATP.",
+            "The pathway of the impulse bypasses cerebral interpretation.",
+            "Sensory neurons are directly connected to effectors.",
+            "Interneurons in the brain inhibit the response."
+        ],
+        correctAnswer: 1,
+        reasoning: "The text states that the 'Brain is not directly involved in simple reflex arcs, making them fast.' This implies the pathway is shorter and does not require the time-consuming process of cerebral interpretation, leading to a rapid response."
+    },
+    {
+        question: "A person experiences difficulty with balance and gait, along with impaired learning of new motor skills, but their basic senses and cognition are normal. Which part of the hindbrain is most likely compromised?",
+        options: [
+            "Pons.",
+            "Medulla Oblongata.",
+            "Cerebellum.",
+            "Midbrain."
+        ],
+        correctAnswer: 2,
+        reasoning: "The cerebellum controls balance and coordination of movement (walking, running, delicate work), and is involved in learning and memory storage for behavior. The described symptoms directly align with cerebellar dysfunction."
+    },
+    {
+        question: "What is the consequence for nerve impulse conduction speed if axon diameter significantly decreases?",
+        options: [
+            "Increased resistance, decreased speed.",
+            "Increased resistance, increased speed.",
+            "Decreased resistance, decreased speed.",
+            "No effect on speed, only on amplitude."
+        ],
+        correctAnswer: 0,
+        reasoning: "The velocity of nerve impulse is 'Faster in thicker neuron fibers (less resistance).' Conversely, a decrease in axon diameter would lead to increased resistance and thus decreased speed of nerve impulse conduction."
+    },
+    {
+        question: "An environmental change causes a local increase in the concentration of K+ ions outside a resting neuron. What initial effect would this have on the membrane potential?",
+        options: [
+            "Increased hyperpolarization.",
+            "Depolarization of the membrane.",
+            "Stabilization of the resting potential.",
+            "Rapid closure of Na+ leak channels."
+        ],
+        correctAnswer: 1,
+        reasoning: "The resting membrane potential is maintained by a higher concentration of K+ inside and Na+ outside, with K+ leaking out. If external K+ concentration increases, the concentration gradient for K+ efflux would decrease, making the inside less negative (more positive), leading to depolarization of the membrane."
+    },
+    {
+        question: "Which type of receptor detects changes in blood osmolarity within the hypothalamus?",
+        options: [
+            "Mechanoreceptors.",
+            "Thermoreceptors.",
+            "Chemoreceptors.",
+            "Photoreceptors."
+        ],
+        correctAnswer: 2,
+        reasoning: "Chemoreceptors detect ions/molecules, and osmoreceptors (which detect blood osmolarity) are mentioned as a type of chemoreceptor located in the hypothalamus. Therefore, chemoreceptors detect changes in blood osmolarity."
+    },
+    {
+        question: "A substance blocks the opening of voltage-regulated K+ channels during the repolarization phase. This would primarily lead to what effect on the membrane potential?",
+        options: [
+            "Preventing Na+ influx.",
+            "Prolonging the depolarized state.",
+            "Deepening the hyperpolarization.",
+            "Accelerating the restoration of RMP."
+        ],
+        correctAnswer: 1,
+        reasoning: "Voltage-regulated K+ channels open during repolarization to allow K+ efflux, returning the membrane potential to rest. If they are blocked, K+ cannot leave, and the membrane will remain in a depolarized or partially repolarized state for an extended period, thus prolonging the depolarized state."
+    },
+    {
+        question: "Which component of the central nervous system primarily links the PNS and the brain and controls many reflexes below the neck?",
+        options: [
+            "The cerebrum.",
+            "The cerebellum.",
+            "The spinal cord.",
+            "The brainstem."
+        ],
+        correctAnswer: 2,
+        reasoning: "The spinal cord's functions include being a 'Link between PNS and brain (conducts signals to and from the brain)' and controlling 'many reflex actions involving body structures below the neck region.'"
+    },
+    {
+        question: "If the corpus callosum is severed, what specific brain function would be primarily impaired?",
+        options: [
+            "Basic reflex actions.",
+            "Coordination of left and right cerebral hemispheres.",
+            "Regulation of automatic bodily functions.",
+            "Processing of sensory information before relay."
+        ],
+        correctAnswer: 1,
+        reasoning: "The cerebrum consists of two cerebral hemispheres connected by the corpus callosum. Severing it would directly impair communication and coordination between these two hemispheres."
+    },
+    {
+        question: "A patient displays difficulty in initiating and stopping movements and struggles with spatial orientation. Which midbrain function is compromised?",
+        options: [
+            "Sleep-wake cycle regulation.",
+            "Relay station for tracts and locating events in space.",
+            "Maintenance of blood pressure.",
+            "Conscious control of responses."
+        ],
+        correctAnswer: 1,
+        reasoning: "The midbrain's functions include being a 'relay station for tracts' and helping to 'locate events in space.' Difficulty with spatial orientation directly points to this midbrain function. While not explicitly stated about movement initiation/stopping, the relay role suggests broader motor control implications within the midbrain context."
+    },
+    {
+        question: "Selective damage to the cerebral cortex's frontal lobe would most directly impact which higher-order function?",
+        options: [
+            "Interpretation of visual stimuli.",
+            "Regulation of involuntary movements.",
+            "Reasoning and judgment.",
+            "Relay of all sensory impulses."
+        ],
+        correctAnswer: 2,
+        reasoning: "The frontal lobe, part of the cerebral cortex, is responsible for 'Memory, reasoning, judgment, thoughts, dreams, analysis, interpretation, conscious control of responses.' Reasoning and judgment are explicitly listed higher-order functions of this lobe."
+    },
+    {
+        question: "An individual experiences impaired memory conversion from short-term to long-term, coupled with difficulties in regulating emotions like fear and rage. Which two limbic system structures are likely simultaneously affected?",
+        options: [
+            "Thalamus and Hypothalamus.",
+            "Hippocampus and Amygdala.",
+            "Pons and Medulla Oblongata.",
+            "Cerebrum and Cerebellum."
+        ],
+        correctAnswer: 1,
+        reasoning: "The hippocampus converts short-term to long-term memory, and the amygdala controls emotions like fear and rage. Both are components of the limbic system, so impaired function in both memory conversion and emotional regulation suggests simultaneous affection of the hippocampus and amygdala."
+    },
+    {
+        question: "What is the primary consequence if the protein synthesis machinery (Nissl's bodies) in a neuron's cell body is significantly impaired?",
+        options: [
+            "Reduced speed of nerve impulse transmission.",
+            "Difficulty in maintaining resting membrane potential.",
+            "Impaired production of essential neuronal components.",
+            "Failure of saltatory conduction."
+        ],
+        correctAnswer: 2,
+        reasoning: "Nissl's bodies are ribosomes and rough ER, responsible for protein synthesis. Proteins are essential for various neuronal components (channels, receptors, enzymes, structural elements). Impairing protein synthesis would lead to impaired production of these essential neuronal components."
+    },
+    {
+        question: "Which of the following describes the most energy-efficient mode of nerve impulse conduction?",
+        options: [
+            "Continuous impulse in thick unmyelinated fibers.",
+            "Saltatory impulse in thick myelinated fibers.",
+            "Continuous impulse in thin myelinated fibers.",
+            "Saltatory impulse in thin unmyelinated fibers."
+        ],
+        correctAnswer: 1,
+        reasoning: "Saltatory conduction (in myelinated fibers) is much faster and 'saving energy' compared to continuous conduction. The velocity is also 'faster in thicker neuron fibers (less resistance).' Combining these, saltatory impulse in thick myelinated fibers would be the most energy-efficient and fastest."
+    },
+    {
+        question: "If the flow of cerebrospinal fluid (CSF) were completely obstructed, what immediate protective function for the CNS would be lost?",
+        options: [
+            "Nutrient supply via blood vessels.",
+            "Cushioning from mechanical shocks.",
+            "Structural rigidity of the brain.",
+            "Filtering of blood plasma."
+        ],
+        correctAnswer: 1,
+        reasoning: "The primary function of CSF explicitly listed in the protection section is that it 'Cushions CNS from mechanical shocks.' An obstruction would immediately compromise this cushioning."
+    },
+    {
+        question: "A patient experiences extreme swings in emotions, from intense anger to profound sadness, without any apparent external triggers. Which specific forebrain structure within the limbic system is likely involved?",
+        options: [
+            "Hippocampus.",
+            "Thalamus.",
+            "Hypothalamus.",
+            "Amygdala."
+        ],
+        correctAnswer: 3,
+        reasoning: "The amygdala 'Controls feelings and emotions (love, hate, anger, fear, rage, sexual arousal).' Extreme and uncontrolled swings in emotions directly point to a dysfunction in the amygdala."
+    },
+    {
+        question: "In the process of repolarization, what is the primary direction of K+ ion movement across the neuronal membrane?",
+        options: [
+            "Influx into the cell.",
+            "Efflux out of the cell.",
+            "Recirculation within the axoplasm.",
+            "Active transport into the cell body."
+        ],
+        correctAnswer: 1,
+        reasoning: "Repolarization occurs when 'Voltage-regulated K+ gates open, and K+ ions rush out of the cell (efflux).' So, the primary direction is efflux out of the cell."
+    },
+    {
+        question: "A neurological condition selectively impairs the ability of sensory organs to detect external stimuli, preventing their conversion into neural signals. This points to a dysfunction in which initial component of nervous coordination?",
+        options: [
+            "Processing/Analysis of Information.",
+            "Response to Stimulus.",
+            "Reception of Stimulus.",
+            "Motor neuron activation."
+        ],
+        correctAnswer: 2,
+        reasoning: "The first step of nervous coordination is 'Reception of Stimulus,' where 'Sensory organs (receptors) detect internal or external stimuli.' If detection is impaired, the reception of stimulus is dysfunctional."
+    },
+    {
+        question: "What structural characteristic of a neuron's dendrites makes them highly efficient in receiving stimuli?",
+        options: [
+            "Long, thick nerve fiber.",
+            "Constant diameter.",
+            "Highly branched extensions.",
+            "Presence of a myelin sheath."
+        ],
+        correctAnswer: 2,
+        reasoning: "Dendrites are described as 'Short, thin, highly branched extensions that receive stimuli and conduct impulses towards the cell body.' Their highly branched nature allows for receiving multiple stimuli."
+    },
+    {
+        question: "A novel disease causes degeneration of the neuron cell bodies located just outside the CNS. Which functional type of neuron would be most directly affected?",
+        options: [
+            "Interneurons.",
+            "Motor neurons.",
+            "Sensory neurons.",
+            "Multipolar neurons."
+        ],
+        correctAnswer: 2,
+        reasoning: "Sensory neurons (Afferent) 'Carry impulses from receptors to the CNS. Cell body often just outside the CNS (dorsal root ganglion).' Degeneration of cell bodies in this location would therefore most directly affect sensory neurons."
+    },
+    {
+        question: "If the voltage-regulated K+ gates were to close significantly faster than normal during repolarization, what would be the impact on the subsequent hyperpolarization phase?",
+        options: [
+            "It would be prolonged.",
+            "It would be exaggerated.",
+            "It would be reduced or absent.",
+            "It would not affect hyperpolarization."
+        ],
+        correctAnswer: 2,
+        reasoning: "Hyperpolarization is described as a 'Slight overshoot beyond RMP (-90mV) due to delayed closing of K+ gates.' If K+ gates close *faster*, this delayed closing effect would be diminished, leading to a reduced or absent hyperpolarization phase."
+    },
+    {
+        question: "An individual sustains a head injury resulting in impaired long-term memory formation and difficulty in controlling emotions such as fear. Which two specific forebrain structures would an MRI likely show damage to?",
+        options: [
+            "Thalamus and Hypothalamus.",
+            "Cerebral Cortex and Cerebellum.",
+            "Hippocampus and Amygdala.",
+            "Pons and Medulla Oblongata."
+        ],
+        correctAnswer: 2,
+        reasoning: "The hippocampus is responsible for converting short-term to long-term memory, and the amygdala controls feelings and emotions like fear. Both are forebrain limbic system structures. Impaired long-term memory and difficulty controlling fear point to damage in both these structures."
+    },
+    {
+        question: "A patient experiences a reduced sense of smell and taste. Which type of receptor is primarily affected?",
+        options: [
+            "Mechanoreceptors.",
+            "Nociceptors.",
+            "Thermoreceptors.",
+            "Chemoreceptors."
+        ],
+        correctAnswer: 3,
+        reasoning: "Chemoreceptors detect ions/molecules, including those responsible for smell and taste. A reduced sense of these directly points to affected chemoreceptors."
+    }
+];
+
+// Update CSS variables with custom colors
+document.documentElement.style.setProperty('--primary-blue', '#1a56db');
+document.documentElement.style.setProperty('--secondary-blue', '#0ea5e9');
+document.documentElement.style.setProperty('--accent-green', '#10b981');
+document.documentElement.style.setProperty('--accent-orange', '#f59e0b');
+document.documentElement.style.setProperty('--accent-red', '#ef4444');
+document.documentElement.style.setProperty('--accent-purple', '#8b5cf6');
+document.documentElement.style.setProperty('--accent-pink', '#ec4899');
+document.documentElement.style.setProperty('--accent-teal', '#14b8a6');
+
+// Global state variables
+const QUIZ_ACCESS_CODE = "1234567890";
+const DEV_ACCESS_CODE = "Dev-PDA-001";
+const ACADEMY_NAME = "PreMium Nexus Testing Service";
+const PAYMENT_NUMBER = "5272";
+const PAYMENT_ACCOUNT_HOLDER = "Account Holder Name";
+const QUIZ_SUBJECT = "Biology ";
+const WEBSITE_LINK = "https://premiumdoctoracademy.com";
+const WHATSAPP_CONTACT = "Dev-PDA-001";
+const WHATSAPP_COMMUNITY = "https://chat.whatsapp.com/Gb12P2oI380LeWyJHylOMh?mode=wwt";
+const TIME_PER_MCQ = 60;
+const MARK_PER_MCQ = 1;
+const NEGATIVE_MARKING = 0;
+
+let currentQuizId = 'Med-Rea-001';
+let quizData = quizData_Med_Rea_001;
+let currentQuestion = 0;
+let userAnswers = Array(quizData.length).fill(null);
+let outOfSyllabusQuestions = Array(quizData.length).fill(false);
+let timeLeft;
+let questionTimeLeft;
+let totalTimeInterval;
+let questionTimeInterval;
+let studentData = {};
+
+// DOM elements
+const signinPage = document.getElementById('signin-page');
+const registrationPage = document.getElementById('registration-page');
+const paymentPage = document.getElementById('payment-page');
+const quizAccessPage = document.getElementById('quiz-access-page');
+const quizPage = document.getElementById('quiz-page');
+const resultsPage = document.getElementById('results-page');
+const allMcqsPage = document.getElementById('all-mcqs-page');
+const questionNavEl = document.getElementById('question-nav');
+const questionTextEl = document.getElementById('question-text');
+const optionsContainerEl = document.getElementById('options-container');
+const reasoningEl = document.getElementById('reasoning');
+const reasoningTextEl = document.getElementById('reasoning-text');
+const quizTitleEl = document.getElementById('quiz-title');
+const quizSubjectEl = document.getElementById('quiz-subject');
+const perMcqTimeEl = document.getElementById('per-mcq-time');
+const totalTimerEl = document.getElementById('timer');
+const questionTimerEl = document.getElementById('question-timer');
+const quizProgressEl = document.getElementById('quiz-progress');
+const studentInfoTable = document.getElementById('student-info-table');
+const quizResultsTable = document.getElementById('quiz-results-table');
+const allMcqsList = document.getElementById('all-mcqs-list');
+const devPasswordInput = document.getElementById('developerPassword');
+const devErrorBox = document.getElementById('dev-error-box');
+const quizAccessCodeInput = document.getElementById('quizAccessCode');
+const quizAccessErrorBox = document.getElementById('quiz-error-box');
+const quizAccessFinalInput = document.getElementById('quizAccessFinal');
+const finalQuizErrorBox = document.getElementById('final-quiz-error-box');
+const toggleDevPasswordIcon = document.getElementById('toggleDeveloperPassword');
+const toggleQuizCodeIcon = document.getElementById('toggleQuizAccessCode');
+const toggleFinalQuizIcon = document.getElementById('toggleQuizAccessFinal');
+const websiteLinkEl = document.getElementById('website-link');
+const whatsappContactLinkEl = document.getElementById('whatsapp-contact-link');
+const whatsappCommunityLinkEl = document.getElementById('whatsapp-community-link');
+const reasoningBtn = document.getElementById('reasoning-btn');
+
+// Update academy name in the DOM
+document.querySelectorAll('.logo h1, .promo-banner h2').forEach(el => {
+    el.textContent = el.textContent.replace('PreMium Nexus Testing Service', ACADEMY_NAME);
+});
+
+// Update payment details
+const paymentWhatsappLink = document.getElementById('payment-whatsapp-link');
+if (paymentWhatsappLink) {
+    paymentWhatsappLink.href = 'https://wa.me/' + PAYMENT_NUMBER;
+    paymentWhatsappLink.textContent = PAYMENT_NUMBER;
+}
+const paymentAccountHolderEl = document.getElementById('payment-account-holder');
+if (paymentAccountHolderEl) {
+    paymentAccountHolderEl.textContent = PAYMENT_ACCOUNT_HOLDER;
+}
+
+// Event listeners for password visibility
+if (toggleDevPasswordIcon) toggleDevPasswordIcon.addEventListener('click', () => togglePasswordVisibility('developerPassword', 'toggleDeveloperPassword'));
+if (toggleQuizCodeIcon) toggleQuizCodeIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessCode', 'toggleQuizAccessCode'));
+if (toggleFinalQuizIcon) toggleFinalQuizIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessFinal', 'toggleQuizAccessFinal'));
+
+// Functions
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function togglePasswordVisibility(inputID, iconID) {
+    const passwordInput = document.getElementById(inputID);
+    const toggleIcon = document.getElementById(iconID);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    }
+}
+
+function showQuizAccessForm() {
+    document.getElementById('quiz-access-form').style.display = 'flex';
+    document.getElementById('developer-access-form').style.display = 'none';
+}
+
+function showDeveloperAccessForm() {
+    document.getElementById('developer-access-form').style.display = 'flex';
+    document.getElementById('quiz-access-form').style.display = 'none';
+}
+
+function showRegistrationPage() {
+    showPage('registration-page');
+}
+
+function checkDeveloperPassword() {
+    if (devPasswordInput.value === DEV_ACCESS_CODE) {
+        devErrorBox.style.display = 'none';
+        startQuiz('Med-Rea-001', 'Developer');
+    } else {
+        devErrorBox.style.display = 'block';
+    }
+}
+
+function checkQuizAccessCode() {
+    if (quizAccessCodeInput.value === QUIZ_ACCESS_CODE) {
+        quizAccessErrorBox.style.display = 'none';
+        showPage('quiz-access-page');
+    } else {
+        quizAccessErrorBox.style.display = 'block';
+    }
+}
+
+function accessQuiz() {
+    if (quizAccessFinalInput.value === QUIZ_ACCESS_CODE) {
+        finalQuizErrorBox.style.display = 'none';
+        startQuiz('Med-Rea-001', 'Student');
+    } else {
+        finalQuizErrorBox.style.display = 'block';
+    }
+}
+
+function validateRegistrationForm() {
+    const fields = ['studentName', 'fatherName', 'email', 'mobile'];
+    for (const field of fields) {
+        if (document.getElementById(field).value.trim() === '') {
+            alert('Please fill in all the registration details.');
+            return;
+        }
+    }
+    
+    studentData = {
+        'Student Name': document.getElementById('studentName').value,
+        'Father Name': document.getElementById('fatherName').value,
+        'Email Address': document.getElementById('email').value,
+        'Mobile Number': document.getElementById('mobile').value
+    };
+
+    // Save to local storage
+    localStorage.setItem('studentData', JSON.stringify(studentData));
+    
+    showPage('payment-page');
+}
+
+function submitPayment() {
+    // Collect the data from the form fields
+    const transactionId = document.getElementById('transactionId').value;
+    const accountHolderName = document.getElementById('accountHolderName').value;
+    const amountSent = document.getElementById('amountSent').value;
+
+    // Check if the acknowledgment box is checked
+    if (!document.getElementById('acknowledgment').checked) {
+        alert('Please check the acknowledgment box to proceed.');
+        return;
+    }
+
+    // Check for empty fields.
+    if (!transactionId || !accountHolderName || !amountSent) {
+        alert('Please ensure all required fields are filled out.');
+        return;
+    }
+    
+    // Load student data from local storage
+    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    
+    // Combine all data into a single object
+    const formData = {
+        studentName: studentData['Student Name'],
+        fatherName: studentData['Father Name'],
+        email: studentData['Email Address'],
+        mobile: studentData['Mobile Number'],
+        transactionId: transactionId,
+        accountHolderName: accountHolderName,
+        amountSent: amountSent
+    };
+
+    // Replace this URL with the one you copied from Apps Script
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyt_Ui7bwAl-tGKvonneZbOkYYo6zRlxOhRvCVISSbnX8DGKgpqmrjQ-soQdPBzXM8/exec';
+    
+    // Send the data using the fetch API
+    fetch(appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData)
+    })
+    .then(response => {
+        // Since we are using 'no-cors', the response is not readable.
+        // We just assume success if the fetch operation completes.
+        console.log('Data sent successfully!');
+        alert("Payment details submitted successfully! You will receive your Quiz Access Code shortly.");
+        showPage('quiz-access-page');
+    })
+    .catch(error => {
+        console.error('Error submitting data:', error);
+        alert("There was an error submitting your details. Please try again or contact support.");
+    });
+}
+
+function startQuiz(quizId, userType) {
+    currentQuizId = quizId;
+    quizData = quizData_Med_Rea_001;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    
+    // Set total time based on time per question
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    questionTimeLeft = TIME_PER_MCQ;
+
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function initQuiz() {
+    // Set quiz subject and time per MCQ
+    quizSubjectEl.textContent = QUIZ_SUBJECT;
+    perMcqTimeEl.textContent = Math.floor(TIME_PER_MCQ / 60);
+    
+    // Set contact links
+    websiteLinkEl.href = WEBSITE_LINK;
+    whatsappContactLinkEl.href = 'https://wa.me/' + WHATSAPP_CONTACT;
+    whatsappCommunityLinkEl.href = WHATSAPP_COMMUNITY;
+    
+    quizTitleEl.textContent = `Test - ID: ${currentQuizId}`;
+    renderQuestionNav();
+    renderQuestion();
+
+    if (totalTimeInterval) clearInterval(totalTimeInterval);
+    if (questionTimeInterval) clearInterval(questionTimeInterval);
+    
+    totalTimeInterval = setInterval(updateTotalTimer, 1000);
+    questionTimeInterval = setInterval(updateQuestionTimer, 1000);
+}
+
+function updateTotalTimer() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        totalTimerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        clearInterval(totalTimeInterval);
+        submitTest();
+    }
+}
+
+function updateQuestionTimer() {
+    if (questionTimeLeft > 0) {
+        questionTimeLeft--;
+        questionTimerEl.textContent = `${questionTimeLeft}`;
+    } else {
+        questionTimeLeft = TIME_PER_MCQ;
+        navigateQuestion('next');
+    }
+}
+
+function renderQuestionNav() {
+    questionNavEl.innerHTML = '';
+    quizData.forEach((_, index) => {
+        const navItem = document.createElement('div');
+        navItem.classList.add('question-nav-item');
+        navItem.textContent = index + 1;
+        navItem.onclick = () => navigateQuestion(index);
+        
+        if (index === currentQuestion) {
+            navItem.classList.add('current');
+        } else if (userAnswers[index] !== null) {
+            navItem.classList.add('solved');
+        } else if (outOfSyllabusQuestions[index]) {
+            navItem.classList.add('out-of-syllabus');
+        } else {
+            navItem.classList.add('visited');
+        }
+        
+        questionNavEl.appendChild(navItem);
+    });
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const solvedCount = userAnswers.filter(answer => answer !== null).length;
+    const progress = (solvedCount / quizData.length) * 100;
+    quizProgressEl.style.width = `${progress}%`;
+}
+
+function renderQuestion() {
+    reasoningEl.style.display = 'none';
+    reasoningBtn.classList.add('disabled');
+    const question = quizData[currentQuestion];
+    questionTextEl.textContent = `${currentQuestion + 1}. ${question.question}`;
+    
+    optionsContainerEl.innerHTML = '';
+    question.options.forEach((option, index) => {
+        const optionEl = document.createElement('div');
+        optionEl.classList.add('option');
+        optionEl.textContent = option;
+        
+        // Add click listener only if not already answered
+        if (userAnswers[currentQuestion] === null) {
+        optionEl.onclick = () => selectOption(index);
+        } else {
+        // Show visual feedback for already answered questions
+        if (index === userAnswers[currentQuestion]) {
+            optionEl.classList.add(userAnswers[currentQuestion] === question.correctAnswer ? 'correct' : 'incorrect');
+        }
+        }
+        
+        optionsContainerEl.appendChild(optionEl);
+    });
+    
+    questionTimeLeft = TIME_PER_MCQ;
+    questionTimerEl.textContent = `${questionTimeLeft}`;
+    renderQuestionNav();
+}
+
+function selectOption(optionIndex) {
+    const question = quizData[currentQuestion];
+    userAnswers[currentQuestion] = optionIndex;
+    
+    // Enable reasoning button
+    reasoningBtn.classList.remove('disabled');
+    
+    // Apply visual feedback
+    const options = optionsContainerEl.querySelectorAll('.option');
+    options.forEach((option, index) => {
+        option.onclick = null; // Disable further clicks
+        if (index === question.correctAnswer) {
+            option.classList.add('correct');
+        } else if (index === optionIndex) {
+            option.classList.add('incorrect');
+        }
+    });
+
+    renderQuestionNav();
+}
+
+function navigateQuestion(direction) {
+    if (direction === 'next') {
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else if (direction === 'prev') {
+        currentQuestion = (currentQuestion - 1 + quizData.length) % quizData.length;
+    } else if (direction === 'skip') {
+        // Do nothing, just move to the next question
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else {
+        currentQuestion = direction;
+    }
+    renderQuestion();
+}
+
+function toggleReasoning() {
+    if (reasoningBtn.classList.contains('disabled')) return;
+    
+    const question = quizData[currentQuestion];
+    if (reasoningEl.style.display === 'block') {
+        reasoningEl.style.display = 'none';
+    } else {
+        reasoningTextEl.textContent = question.reasoning;
+        reasoningEl.style.display = 'block';
+    }
+}
+
+function markOutOfSyllabus() {
+    outOfSyllabusQuestions[currentQuestion] = true;
+    userAnswers[currentQuestion] = null;
+    renderQuestionNav();
+    navigateQuestion('next');
+}
+
+function submitTest() {
+    if (confirm('Are you sure you want to submit the quiz?')) {
+        clearInterval(totalTimeInterval);
+        clearInterval(questionTimeInterval);
+
+        let correct = 0;
+        let incorrect = 0;
+        let unanswered = 0;
+        let outOfSyllabus = 0;
+
+        quizData.forEach((question, index) => {
+            if (outOfSyllabusQuestions[index]) {
+                outOfSyllabus++;
+            } else if (userAnswers[index] === null) {
+                unanswered++;
+            } else if (userAnswers[index] === question.correctAnswer) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+        });
+
+        const totalQuestions = quizData.length;
+        const totalScore = (correct * MARK_PER_MCQ) - (incorrect * NEGATIVE_MARKING);
+        const totalMarks = totalQuestions * MARK_PER_MCQ;
+
+        // Load student data from local storage
+        const savedStudentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        
+        // Populate student info table
+        let studentInfoHtml = '';
+        for (const [key, value] of Object.entries(savedStudentData)) {
+            studentInfoHtml += `<tr><td>${key}</td><td>${value}</td></tr>`;
+        }
+        studentInfoTable.innerHTML = studentInfoHtml;
+
+        // Populate quiz results table
+        quizResultsTable.innerHTML = `
+            <tr><td>Total Questions</td><td>${totalQuestions}</td></tr>
+            <tr><td>Correct Answers</td><td>${correct}</td></tr>
+            <tr><td>Incorrect Answers</td><td>${incorrect}</td></tr>
+            <tr><td>Unanswered</td><td>${unanswered}</td></tr>
+            <tr><td>Out of Syllabus</td><td>${outOfSyllabus}</td></tr>
+            <tr><td>Mark Per MCQ</td><td>${MARK_PER_MCQ}</td></tr>
+            <tr><td>Negative Marking</td><td>${NEGATIVE_MARKING}</td></tr>
+            <tr><td>Your Score</td><td>${totalScore} / ${totalMarks}</td></tr>
+        `;
+
+        showPage('results-page');
+    }
+}
+
+function restartTest() {
+    if (confirm('Are you sure you want to retake the full test? Your current progress will be lost.')) {
+        // Reset quiz data and state
+        quizData = quizData_Med_Rea_001;
+        currentQuestion = 0;
+        userAnswers = Array(quizData.length).fill(null);
+        outOfSyllabusQuestions = Array(quizData.length).fill(false);
+        timeLeft = quizData.length * TIME_PER_MCQ;
+        
+        showPage('quiz-page');
+        initQuiz();
+    }
+}
+
+function retakeIncorrect() {
+    const incorrectQuestions = quizData.filter((question, index) => 
+        !outOfSyllabusQuestions[index] && 
+        userAnswers[index] !== null && 
+        userAnswers[index] !== question.correctAnswer);
+    
+    if (incorrectQuestions.length === 0) {
+        alert('You have no incorrect questions to retake!');
+        return;
+    }
+    
+    quizData = incorrectQuestions;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function viewAllMcqs() {
+    allMcqsList.innerHTML = '';
+    quizData_Med_Rea_001.forEach((question, index) => {
+        const mcqItem = document.createElement('div');
+        mcqItem.classList.add('all-mcq-item');
+        mcqItem.innerHTML = `
+            <div class="question-text">${index + 1}. ${question.question}</div>
+            <div class="all-mcq-options">
+                ${question.options.map((option, optIndex) => `
+                    <div class="all-mcq-option ${optIndex === question.correctAnswer ? 'correct' : ''}">
+                        ${option}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="all-mcq-reasoning">
+                <strong>Reasoning:</strong> ${question.reasoning}
+            </div>
+        `;
+        allMcqsList.appendChild(mcqItem);
+    });
+    showPage('all-mcqs-page');
+}
+
+// Initial state
+showPage('signin-page');
+
+</script>
+</body>
+</html>
+                            
